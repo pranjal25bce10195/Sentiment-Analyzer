@@ -1,14 +1,3 @@
-"""
-train_model.py
---------------
-Trains a Logistic Regression sentiment classifier on the NLTK movie_reviews
-dataset and saves:
-  - models/sentiment_model.pkl   (the trained pipeline)
-  - models/label_encoder.pkl     (LabelEncoder: 'neg'/'pos' <-> 0/1)
-
-Run once before using the ML-powered GUI:
-    python train_model.py
-"""
 
 import os
 import pickle
@@ -24,10 +13,10 @@ from sklearn.metrics import classification_report, accuracy_score
 # ── Download required NLTK data ───────────────────────────────────────────────
 nltk.download("movie_reviews", quiet=True)
 nltk.download("punkt",         quiet=True)
+nltk.download("punkt_tab",     quiet=True)   # required by NLTK 3.9+
 nltk.download("stopwords",     quiet=True)
 
 from nltk.corpus import movie_reviews, stopwords
-from nltk.tokenize import word_tokenize
 
 # ── Build dataset ─────────────────────────────────────────────────────────────
 def load_dataset():
@@ -45,8 +34,10 @@ def load_dataset():
 _stop_words = set(stopwords.words("english"))
 
 def preprocess(text: str) -> str:
-    """Lowercase, tokenize, remove stopwords & non-alpha tokens."""
-    tokens = word_tokenize(text.lower())
+    """Lowercase, split, remove stopwords & non-alpha tokens.
+    Uses split() instead of word_tokenize() to avoid punkt dependency.
+    """
+    tokens   = text.lower().split()
     filtered = [t for t in tokens if t.isalpha() and t not in _stop_words]
     return " ".join(filtered)
 
