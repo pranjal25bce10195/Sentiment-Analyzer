@@ -1,4 +1,4 @@
-# Neural Sentiment Analyzer // AI-ML Edition
+# Neural Sentiment Analyzer
 
 ## Overview
 
